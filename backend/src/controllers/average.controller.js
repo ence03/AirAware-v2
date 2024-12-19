@@ -22,6 +22,8 @@ export const createAverage = async (req, res) => {
 
     await newAverage.save();
 
+    req.io.emit("newAvgData", newAverage);
+
     return res.status(201).json({
       success: true,
       message: "Average Stored",
@@ -38,7 +40,16 @@ export const createAverage = async (req, res) => {
 };
 
 export const getAllAverage = async (req, res) => {
+  const { type } = req.query;
+
   try {
+    let query = {};
+
+    // If a 'type' query parameter is provided, filter by type (hourly or daily)
+    if (type) {
+      query.type = type;
+    }
+
     const averages = await Average.find().populate("deviceId", "name");
     if (!averages) {
       return res.status(404).json({
