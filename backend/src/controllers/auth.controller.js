@@ -26,6 +26,7 @@ export const register = async (req, res) => {
       username,
       email,
       password: hashedPassword,
+      role: req.body.role || "user",
     });
 
     await newUser.save();
@@ -91,6 +92,7 @@ export const login = async (req, res) => {
       user: {
         username: user.username,
         email: user.email,
+        role: user.role,
       },
       token,
     });

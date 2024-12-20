@@ -3,13 +3,14 @@ import mongoose from "mongoose";
 
 export const createDevice = async (req, res) => {
   try {
-    const { name, user, relayState, operationDuration } = req.body;
+    const { name, user, relayState, operationDuration, location } = req.body;
 
     const device = new Device({
       name,
       user,
       relayState,
       operationDuration,
+      location,
     });
 
     await device.save();

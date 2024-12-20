@@ -20,6 +20,9 @@ const deviceSchema = new Schema(
       type: String,
       enum: ["10min", "30min", "1hr"],
     },
+    location: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
