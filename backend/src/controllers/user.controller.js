@@ -25,6 +25,41 @@ export const getAllUsers = async (req, res) => {
   }
 };
 
+export const getUser = async (req, res) => {
+  const { id } = req.params;
+
+  // Check if the ID is valid
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid Id format, try again",
+    });
+  }
+
+  try {
+    // Find user by ID
+    const user = await User.findById({ _id: id });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: user,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
+
 export const editUser = async (req, res) => {
   const { id } = req.params;
 
@@ -58,6 +93,41 @@ export const editUser = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Failed to edit user",
+    });
+  }
+};
+
+export const deleteUser = async (req, res) => {
+  const { id } = req.params;
+
+  // Check if the ID is valid
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid Id format, try again",
+    });
+  }
+
+  try {
+    // Find and delete the user
+    const deletedUser = await User.findByIdAndDelete({ _id: id });
+
+    if (!deletedUser) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "User deleted successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
     });
   }
 };
